@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-"""
-Simple File Audit System
-Features:
- - Configurable via INI file
- - Role-based permissions
- - Audit logging of operations
- - CLI interface for file operations and audit reporting
-"""
 import os
 import shutil
 import logging
@@ -15,9 +6,6 @@ import configparser
 import datetime
 from functools import wraps
 
-# ---------------------------------------
-# Configuration
-# ---------------------------------------
 CONFIG_FILE = 'audit_config.ini'
 config = configparser.ConfigParser()
 config.read(CONFIG_FILE)
@@ -31,19 +19,12 @@ logging.basicConfig(
     format='%(asctime)s | %(levelname)s | %(message)s'
 )
 
-# ---------------------------------------
-# Role Permissions
-# ---------------------------------------
 ROLE_PERMISSIONS = {
     'admin':   ['read', 'write', 'delete', 'move', 'copy', 'metadata', 'report'],
     'user':    ['read', 'write', 'metadata'],
     'auditor': ['read', 'metadata', 'report'],
     'guest':   ['read']
 }
-
-# ---------------------------------------
-# Audit Decorator
-# ---------------------------------------
 def requires_permission(op):
     def decorator(fn):
         @wraps(fn)
@@ -60,10 +41,6 @@ def requires_permission(op):
                 return f"Error on '{op}': {e}"
         return wrapper
     return decorator
-
-# ---------------------------------------
-# AuditSystem Class
-# ---------------------------------------
 class AuditSystem:
     def __init__(self, user, role):
         self.user = user
@@ -119,10 +96,6 @@ class AuditSystem:
                 if not since or since in line:
                     lines.append(line.strip())
         return '\n'.join(lines)
-
-# ---------------------------------------
-# CLI Interface
-# ---------------------------------------
 def main():
     parser = argparse.ArgumentParser(description='File Audit System')
     parser.add_argument('user', help='User name')
@@ -173,3 +146,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
